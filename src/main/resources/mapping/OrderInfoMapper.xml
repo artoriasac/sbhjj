@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.order.OrderInfoMapper">
+  <resultMap id="BaseResultMap" type="com.model.entity.order.OrderInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="create_user" jdbcType="INTEGER" property="createUser" />
+    <result column="scheduled_time" jdbcType="INTEGER" property="scheduledTime" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.model.entity.order.OrderInfo">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, type, create_time, rank, create_user, scheduled_time, weight
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from order_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.model.entity.order.OrderInfo">
+    <selectKey order="AFTER" keyProperty="id" resultType="integer">
+    SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_info (id, title, type, 
+      create_time, rank, create_user, 
+      scheduled_time, weight, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{rank,jdbcType=INTEGER}, #{createUser,jdbcType=INTEGER}, 
+      #{scheduledTime,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.model.entity.order.OrderInfo">
+    insert into order_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="scheduledTime != null">
+        scheduled_time,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        #{scheduledTime,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.model.entity.order.OrderInfo">
+    update order_info
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=INTEGER},
+      </if>
+      <if test="scheduledTime != null">
+        scheduled_time = #{scheduledTime,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.model.entity.order.OrderInfo">
+    update order_info
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      rank = #{rank,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      scheduled_time = #{scheduledTime,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.model.entity.order.OrderInfo">
+    update order_info
+    set title = #{title,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      rank = #{rank,jdbcType=INTEGER},
+      create_user = #{createUser,jdbcType=INTEGER},
+      scheduled_time = #{scheduledTime,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectOrderList" resultType="com.model.vo.order.OrderListVO">
+    SELECT
+    o.id id,
+    t.`type` TYPE,
+    title title,
+    u.`nickname` createUser,
+    u.`id` createUserId,
+    r.rank rank
+    FROM `order_info` o INNER JOIN order_rank r
+    ON o.`rank`=r.`id`
+    INNER JOIN `user` u ON o.`create_user`=u.`id`
+    INNER JOIN order_type t ON t.`id`=o.`type`
+    <where>
+      <if test="title!=null">
+        and o.title like concat('%',#{title},'%')
+      </if>
+      <if test="type!=null">
+        and o.type in
+        <foreach collection="type" index="index" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+      <if test="createUser!=null">
+        and o.create_user = #{createUser}
+      </if>
+    </where>
+  </select>
+  <select id="orderInfo" resultType="com.model.vo.order.OrderInfoVO">
+    SELECT
+    o.id id,
+    t.`type` TYPE,
+    t.id typeId,
+    title title,
+    o.content content,
+    u.`nickname` createUser,
+    u.`id` createUserId,
+    r.rank rank
+    FROM `order_info` o INNER JOIN order_rank r
+    ON o.`rank`=r.`id`
+    INNER JOIN `user` u ON o.`create_user`=u.`id`
+    INNER JOIN order_type t ON t.`id`=o.`type`
+    WHERE o.id=#{id}
+  </select>
+  <select id="selfOrderList" resultType="com.model.vo.order.OrderListVO">
+    SELECT
+    o.id id,
+    t.`type` TYPE,
+    title title,
+    u.`nickname` createUser,
+    u.`id` createUserId,
+    r.rank rank
+    FROM `order_info` o INNER JOIN order_rank r
+    ON o.`rank`=r.`id`
+    INNER JOIN `user` u ON o.`create_user`=u.`id`
+    INNER JOIN order_type t ON t.`id`=o.`type`
+    inner join order_user ou on o.id=ou.order_id
+    where ou.user_id=#{userId} and ou.type=0
+  </select>
+  <select id="orderSumWeight" resultType="double">
+    SELECT
+      SUM(weight)
+    FROM
+      order_user ou
+      INNER JOIN order_user_position oup
+        ON ou.`id` = oup.`order_user`
+      INNER JOIN `position` p
+        ON p.`id` = oup.`position`
+    WHERE ou.`order_id` = #{orderId}
+  </select>
+  <select id="orderUserWeight" resultType="com.model.bo.order.OrderUserWeight">
+    SELECT
+      ou.`user_id` userId,
+      SUM(weight) weight
+    FROM
+      order_user ou
+      INNER JOIN order_user_position oup
+        ON ou.`id` = oup.`order_user`
+      INNER JOIN `position` p
+        ON p.`id` = oup.`position`
+    WHERE ou.`order_id` = #{orderId}
+    GROUP BY ou.`user_id`
+  </select>
+  <select id="selectOrderScore" resultType="integer">
+    SELECT
+      r.`score`
+    FROM
+      order_info i
+      INNER JOIN order_rank r
+        ON i.`rank` = r.`id`
+    WHERE i.`id` = #{orderId}
+  </select>
+</mapper>

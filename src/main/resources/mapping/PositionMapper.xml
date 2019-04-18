@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.position.PositionMapper">
+  <resultMap id="BaseResultMap" type="com.model.entity.position.Position">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="classify" jdbcType="INTEGER" property="classify" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, content, rank, weight, classify
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from position
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from position
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.model.entity.position.Position">
+    insert into position (id, content, rank, 
+      weight, classify)
+    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{rank,jdbcType=INTEGER}, 
+      #{weight,jdbcType=DOUBLE}, #{classify,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.model.entity.position.Position">
+    insert into position
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="classify != null">
+        classify,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="classify != null">
+        #{classify,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.model.entity.position.Position">
+    update position
+    <set>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DOUBLE},
+      </if>
+      <if test="classify != null">
+        classify = #{classify,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.model.entity.position.Position">
+    update position
+    set content = #{content,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DOUBLE},
+      classify = #{classify,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByContentRankClassify" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from position
+    where content=#{content}
+    and classify=#{classify}
+    and rank=#{rank}
+  </select>
+  <select id="positionList" resultType="com.model.vo.position.PositionListVO">
+    select
+    p.id id,
+    r.content rank,
+    p.rank rankId,
+    p.content content,
+    p.weight weight
+    from position p inner join position_rank r on p.rank=r.id
+    where p.classify=#{classify}
+    <if test="rank!=null">
+     and p.rank=#{rank}
+    </if>
+    <if test="content!=null">
+     and p.content like concat('%',#{content},'%')
+    </if>
+  </select>
+</mapper>
