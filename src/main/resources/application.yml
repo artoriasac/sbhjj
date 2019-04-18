@@ -1,11 +1,13 @@
 spring:
   profiles:
-    active: dev
+    include: dev,db,mq,redis
 
 server:
   port: 8080
   connection:
     timeout: 7200
+  servlet:
+    context-path: /sbhjj
 
 mybatis:
   mapper-locations: classpath:mapping/*.xml
