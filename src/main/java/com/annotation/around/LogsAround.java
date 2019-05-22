@@ -16,7 +16,6 @@ public class LogsAround {
         try {
             return  joinPoint.proceed();
         }catch (Exception e){
-
             return new Result<>("500",e.getMessage());
         }
     }

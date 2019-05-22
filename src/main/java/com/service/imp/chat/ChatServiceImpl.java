@@ -38,10 +38,10 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public void open(Session session, String userId) {
-        User user = userMapper.selectByPrimaryKey(Integer.valueOf(userId));
-        if (user==null){
-            throw new ServiceException("用户不存在");
-        }
+//        User user = userMapper.selectByPrimaryKey(Integer.valueOf(userId));
+//        if (user==null){
+//            throw new ServiceException("用户不存在");
+//        }
         sockets.put(WEB_SOCKET+userId,session);
     }
 
@@ -70,6 +70,9 @@ public class ChatServiceImpl implements ChatService {
         chatMessage.setReadType(NOT_READ);
         chatMessageMapper.insert(chatMessage);
 
+        if (!isClientWebSocket(WEB_SOCKET + m.getFromUser())){
+            return;
+        }
         Session fromSession = sockets.get(WEB_SOCKET + m.getFromUser());
         fromSession.getBasicRemote().sendText(JSONUtils.objToJson(m));
     }

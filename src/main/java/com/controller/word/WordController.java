@@ -56,11 +56,11 @@ public class WordController {
     @Login
     @GetMapping("wordInfoList")
     @ApiOperation("文档列表")
-    public Result<DataInfo<WordInfoListVO>> wordInfoList(@ApiParam("分类id") @RequestParam Integer classifyId,
+    public Result<DataInfo<WordInfoListVO>> wordInfoList(@ApiParam(value = "分类id",required = true) @RequestParam Integer classifyId,
                                                          @ApiParam("标题") @RequestParam(required = false) String title,
                                                          @ApiParam("备注") @RequestParam(required = false) String mark,
-                                                         @ApiParam("当前页数") @RequestParam Integer page,
-                                                         @ApiParam("每页条数") @RequestParam Integer pageSize){
+                                                         @ApiParam("当前页数") @RequestParam(required = false) Integer page,
+                                                         @ApiParam("每页条数") @RequestParam(required = false) Integer pageSize){
         DataInfo<WordInfoListVO> result=wordService.wordInfoList(classifyId,title,mark,page,pageSize);
         return new Result(result);
     }

@@ -1,15 +1,19 @@
 package com.controller.chat;
 
-import com.common.configuration.MyEndpointConfigure;
 import com.service.inf.chat.ChatService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -19,18 +23,22 @@ import javax.websocket.server.ServerEndpoint;
 
 @RestController
 @Api(tags = "聊天webSocket部分")
-@ServerEndpoint(value = "/chatWebSocket/{userId}",configurator = MyEndpointConfigure.class)
-public class ChatWebSocket {
-    @Autowired
+@ServerEndpoint(value = "/chatWebSocket/{userId}")
+@Order
+public class ChatWebSocket  {
+
+    public static void setApplicationContext(ApplicationContext applicationContext)  {
+        ChatWebSocket.applicationContext=applicationContext;
+    }
+
+    private static ApplicationContext applicationContext;
     private ChatService chatService;
+
 
     @ApiOperation("连接")
     @OnOpen
     public void open(@ApiParam("用户id") @PathParam("userId") String userId, Session session){
-//        if (request!=null){
-//            Object member_info = request.getSession().getAttribute("MEMBER_INFO");
-//            System.out.println(member_info.toString());
-//        }
+        chatService=applicationContext.getBean(ChatService.class);
         if (session==null||userId==null){
             return;
         }
