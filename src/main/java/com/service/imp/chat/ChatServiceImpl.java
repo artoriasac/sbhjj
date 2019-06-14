@@ -1,21 +1,24 @@
 package com.service.imp.chat;
 
+import com.common.model.DataInfo;
 import com.common.model.Message;
-import com.common.model.ServiceException;
 import com.common.utils.DateFormatUtil;
 import com.common.utils.JSONUtils;
+import com.common.utils.MemberUtils;
+import com.common.utils.PageUtils;
 import com.mapper.chat.ChatMessageMapper;
 import com.mapper.user.UserMapper;
 import com.model.entity.chat.ChatMessage;
-import com.model.entity.user.User;
+import com.model.vo.chat.ChatInfoListVO;
+import com.model.vo.chat.ChatListVO;
 import com.service.inf.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.websocket.Session;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -59,6 +62,10 @@ public class ChatServiceImpl implements ChatService {
         Date date = new Date(System.currentTimeMillis());
 
         Message m = JSONUtils.jsonToObj(message, Message.class);
+
+        if (!isClientWebSocket(WEB_SOCKET + m.getFromUser())){
+            return;
+        }
         m.setSendUser(userId);
         m.setDate(DateFormatUtil.formatDate(date,DateFormatUtil.FORMAT));
 
@@ -70,19 +77,28 @@ public class ChatServiceImpl implements ChatService {
         chatMessage.setReadType(NOT_READ);
         chatMessageMapper.insert(chatMessage);
 
-        if (!isClientWebSocket(WEB_SOCKET + m.getFromUser())){
-            return;
-        }
+
         Session fromSession = sockets.get(WEB_SOCKET + m.getFromUser());
         fromSession.getBasicRemote().sendText(JSONUtils.objToJson(m));
     }
 
     @Override
-    public Boolean isClientWebSocket(String userId) {
-        if (userId==null){
+    public Boolean isClientWebSocket(String key) {
+        if (key==null){
             return false;
         }
-       return sockets.containsKey(WEB_SOCKET+userId);
+       return sockets.containsKey(key);
+    }
 
+    @Override
+    public List<ChatListVO> chatList() {
+        List<ChatListVO> result=chatMessageMapper.chatList(MemberUtils.getMemberInfo().getId());
+        return result;
+    }
+
+    @Override
+    public DataInfo<ChatInfoListVO> chatInfoList(Integer userId,Integer page,Integer pageSize) {
+        PageUtils.startPage(page,pageSize);
+        return PageUtils.getDataInfo(chatMessageMapper.chatInfoList(MemberUtils.getMemberInfo().getId(),userId));
     }
 }

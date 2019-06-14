@@ -1,6 +1,5 @@
 package com.service.inf.user;
 
-import com.common.model.MemberInfo;
 import com.model.dto.user.*;
 import com.model.vo.position.PositionListVO;
 import com.model.vo.user.CourtyardListVO;
@@ -14,7 +13,7 @@ public interface UserService {
 
     void signUp(SignUpDTO signUpDTO)throws Exception;
 
-    MemberInfo signIn(SignInDTO signInDTO);
+    String signIn(SignInDTO signInDTO);
 
     void updateUser(UpdateUserDTO updateUserDTO);
 
@@ -24,7 +23,7 @@ public interface UserService {
 
     List<CourtyardListVO> courtyardList();
 
-    List<UserListVO> userList(String nickName);
+    List<UserListVO> userList(String nickName,Integer id);
 
     void addCourtyardUser(AddCourtyardUserDTO addCourtyardUserDTO);
 

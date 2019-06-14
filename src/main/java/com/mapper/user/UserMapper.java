@@ -27,5 +27,5 @@ public interface UserMapper {
 
     User selectByAccountAndPassword(@Param("account") String account,@Param("password") String password);
 
-    List<UserListVO> userList(@Param("nickname") String nickname);
+    List<UserListVO> userList(@Param("nickname") String nickname,@Param("id") Integer id);
 }

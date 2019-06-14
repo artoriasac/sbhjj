@@ -103,4 +103,64 @@
       read_type = #{readType,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="chatList" resultType="com.model.vo.chat.ChatListVO">
+    SELECT
+      u.id otherUserId,
+      u.`nickname` otherUserNickname,
+      u.`head_url` otherUserHeadUrl,
+      w.content content,
+      w.create_time createTime
+    FROM
+      `user` u
+      INNER JOIN
+        (SELECT
+          *
+        FROM
+          (SELECT
+            *
+          FROM
+            `chat_message` c
+            INNER JOIN
+              (SELECT DISTINCT
+                IF(send_user = #{id}, from_user, send_user) `user`
+              FROM
+                `chat_message`
+              WHERE send_user = #{id}
+                OR from_user = #{id}) t
+              ON (
+                c.`send_user` = #{id}
+                AND c.`from_user` = t.user
+              )
+              OR (
+                c.`send_user` = t.user
+                AND c.`from_user` = #{id}
+              )
+          ORDER BY create_time DESC) q
+        GROUP BY q.`user`
+        ORDER BY create_time DESC) w
+        ON u.id = w.user
+        ORDER BY createTime DESC
+  </select>
+  <select id="chatInfoList" resultType="com.model.vo.chat.ChatInfoListVO">
+    SELECT
+      t.*,
+      u.`nickname` sendNickname
+    FROM
+      `user` u
+      INNER JOIN
+        (SELECT
+          id,
+          send_user sendUser,
+          from_user fromUser,
+          content,
+          create_time createTime
+        FROM
+          `chat_message`
+        WHERE (send_user = #{thisUserId}
+            AND from_user = #{otherUserId})
+          OR (send_user =  #{otherUserId}
+            AND from_user = #{thisUserId})) t
+        ON u.id = t.sendUser
+    ORDER BY t.createTime DESC
+  </select>
 </mapper>

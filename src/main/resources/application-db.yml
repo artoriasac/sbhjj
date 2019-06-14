@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://artorias.vip:3306/sbhjj
+    url: jdbc:mysql://artorias.vip:3306/sbhjj?useUnicode=true&characterEncoding=utf8&serverTimezone=CTT
     username: root
     password: Artorias!741
     # 使用druid数据源

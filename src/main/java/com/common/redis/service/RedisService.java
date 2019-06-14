@@ -15,4 +15,5 @@ public interface RedisService {
     <T> T get(String key,Class<T> t);
     <T> List<T> getList(String key, Class<T> type);
     void del(String key);
+     Boolean hasKey(String key);
 }

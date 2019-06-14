@@ -117,8 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MemberInfo signIn(SignInDTO signInDTO) {
-
+    public String signIn(SignInDTO signInDTO) {
         if (signInDTO==null){
             return null;
         }
@@ -132,8 +131,7 @@ public class UserServiceImpl implements UserService {
         }
         MemberInfo memberInfo=new MemberInfo();
         BeanUtils.copyProperties(user,memberInfo);
-        MemberUtils.setMemberInfo(memberInfo);
-        return memberInfo;
+        return MemberUtils.setMemberInfo(memberInfo);
     }
 
     @Override
@@ -188,8 +186,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserListVO> userList(String nickName) {
-        return userMapper.userList(nickName);
+    public List<UserListVO> userList(String nickName,Integer id) {
+        return userMapper.userList(nickName,id);
     }
 
     @Override

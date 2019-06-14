@@ -5,6 +5,7 @@ import com.annotation.Login;
 import com.annotation.Logs;
 import com.common.model.MemberInfo;
 import com.common.model.Result;
+import com.common.utils.MemberUtils;
 import com.model.dto.user.*;
 import com.model.vo.position.PositionListVO;
 import com.model.vo.user.CourtyardListVO;
@@ -37,7 +38,6 @@ public class UserController {
     }
 
     @Logs
-    @Login
     @ApiOperation("注册")
     @PostMapping("signUp")
     public Result signUp(@RequestBody SignUpDTO signUpDTO)throws Exception{
@@ -46,12 +46,19 @@ public class UserController {
     }
 
     @Logs
-    @Login
     @ApiOperation("登录")
     @PostMapping("signIn")
-    public Result<MemberInfo> signIn(@RequestBody SignInDTO signInDTO)throws Exception{
-        MemberInfo result=userService.signIn(signInDTO);
+    public Result<String> signIn(@RequestBody SignInDTO signInDTO)throws Exception{
+        String result=userService.signIn(signInDTO);
         return new Result(result);
+    }
+
+    @Logs
+    @Login
+    @ApiOperation("当前用户信息")
+    @GetMapping("memberInfo")
+    public Result<MemberInfo> memberInfo()throws Exception{
+        return new Result(MemberUtils.getMemberInfo());
     }
 
     @Logs
@@ -105,8 +112,9 @@ public class UserController {
     @Login
     @ApiOperation("员工列表")
     @GetMapping("userList")
-    public Result<List<UserListVO>> userList(@ApiParam("昵称")@RequestParam(required = false) String nickname)throws Exception{
-        List<UserListVO> result=userService.userList(nickname);
+    public Result<List<UserListVO>> userList(@ApiParam("昵称")@RequestParam(required = false) String nickname,
+                                             @RequestParam(required = false) Integer id)throws Exception{
+        List<UserListVO> result=userService.userList(nickname,id);
         return new Result(result);
     }
 

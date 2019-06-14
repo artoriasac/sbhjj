@@ -33,14 +33,7 @@ public class LoginAround {
     public Object doInvoke(ProceedingJoinPoint joinPoint)throws Throwable{
     MemberInfo memberInfo = MemberUtils.getMemberInfo();
     if(memberInfo==null) {
-        MemberInfo test=new MemberInfo();
-        test.setId(4);
-        test.setAccount("admin");
-        test.setMark("admin");
-        test.setNickname("admin");
-        test.setGender("未知");
-        MemberUtils.setMemberInfo(test);
-        //return new Result<>("600","未登录");
+        return new Result<>("600","未登录");
     }
      return joinPoint.proceed();
     }

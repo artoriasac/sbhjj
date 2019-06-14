@@ -3,6 +3,7 @@ package com.common.redis.service.impl;
 import com.common.redis.service.RedisService;
 import com.common.utils.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +24,20 @@ public class RedisServiceImpl implements RedisService {
 
     private String ZERO="0";
 
-    private Long ZERO_TIME=0l;
+    private Long ZERO_TIME=0L;
 
 
+    @Override
     public void  set(String key,String value){
         if (key==null||value==null){
             return;
         }
         redisTemplate.opsForValue().set(key,value);
+    }
+
+    @Override
+    public Boolean hasKey(String key){
+        return redisTemplate.hasKey(key);
     }
 
     /**
@@ -41,6 +48,7 @@ public class RedisServiceImpl implements RedisService {
      *@param value
      *@param seconds
      */
+    @Override
     public void  set(String key,String value,Long seconds){
         if (key==null||value==null){
             return;
@@ -54,6 +62,7 @@ public class RedisServiceImpl implements RedisService {
         }
     }
 
+    @Override
     public String get(String key){
         if (key==null){
             return null;
@@ -61,6 +70,7 @@ public class RedisServiceImpl implements RedisService {
        return redisTemplate.opsForValue().get(key);
     }
 
+    @Override
     public <T> T get(String key,Class<T> t){
         if (key==null||t==null){
             return null;
@@ -75,6 +85,7 @@ public class RedisServiceImpl implements RedisService {
         return result;
     }
 
+    @Override
     public <T> List<T> getList(String key,Class<T> type){
         if (key==null||type==null){
             return null;
@@ -89,6 +100,7 @@ public class RedisServiceImpl implements RedisService {
         return result;
     }
 
+    @Override
     public void del(String key){
         if (key==null){
             return;

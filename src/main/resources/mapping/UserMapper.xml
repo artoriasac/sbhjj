@@ -215,6 +215,9 @@
       <if test="nickname!=null">
         nickname like concat('%', #{nickname},'%')
       </if>
+      <if test="id!=null">
+        and id=#{id}
+      </if>
     </where>
   </select>
 </mapper>
